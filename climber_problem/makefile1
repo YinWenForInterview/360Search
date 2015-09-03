@@ -1,0 +1,28 @@
+all : unittest_climber 
+
+check : $(TARGET)
+	./$^
+
+CC=gcc
+CXX=g++
+CFLAGS= -g -D_DEBUG -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall -MMD
+CPPFLAGS=$(CFLAGS) -Woverloaded-virtual -Wsign-promo -fno-gnu-keywords -std=c++11
+
+OBJ = DisjSet.o main.o Mountain.o sort.o
+
+
+
+unittest_climber : DisjSet.o main.o Mountain.o sort.o
+	$(CXX) $(LPPFLAGS) -o $@ $(OBJ)
+
+main.o: main.cc Mountain.h
+	$(CXX) $(CPPFLAGS) -c main.cc
+
+Mountain.o: Mountain.cpp Mountain.h sort.h DisjSet.h
+	$(CXX) $(CPPFLAGS) -c Mountain.cpp
+
+sort.o: sort.cpp sort.h Mountain.h
+	$(CXX) $(CPPFLAGS) -c sort.cpp
+
+DisjSet.o: DisjSet.cpp DisjSet.h
+	$(CXX) $(CPPFLAGS) -c DisjSet.cpp

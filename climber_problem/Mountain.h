@@ -8,7 +8,8 @@ struct Mountain
 	int hight;
 };
 
-int resolve(char const* originstr);
 
 
 #endif 
+
+int resolve(const char * originstr);

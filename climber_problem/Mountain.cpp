@@ -16,12 +16,12 @@ using namespace std;
 
 typedef struct Mountain* Mount;
 
-int readFromStr(char const *strptr, Mount & M);
-int getnumber(char const *&ptr);
+int readFromStr(const char *strptr, Mount & M);
+int getnumber(const char *&ptr);
 void comboMountains(DisjSet &S, Mount &M, int num);
 
 /*count the distance*/
-int resolve(char const * originstr)
+int resolve(const char * originstr)
 {
     Mount mounts=NULL;
     int totalMounts = readFromStr(originstr, mounts);
@@ -59,10 +59,9 @@ int resolve(char const * originstr)
 }
 
 /*read mountains from str*/
-int readFromStr(char const *strptr, Mount & M)
+int readFromStr(const char *strptr, Mount & M)
 {
     int num;
-    int left, right, hight;
 
     std::string str = "";
 
@@ -75,11 +74,13 @@ int readFromStr(char const *strptr, Mount & M)
        M[i].right = getnumber(strptr);
        M[i].hight = getnumber(strptr);
    }
+
+    return num;
 }
 
 
 /*输入数字开始的地址，返回数字，并且修改指针指向下一个开始的数字*/
-int getnumber(char const *&ptr)
+int getnumber(const char *&ptr)
 {
     string str ="";
     while( *ptr >='0'&& *ptr<='9' )

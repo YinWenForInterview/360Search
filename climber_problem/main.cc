@@ -1,14 +1,12 @@
 #include <stdio.h>
 #include <assert.h>
+#include "Mountain.h"
+
 
 #define H_ARRAYSIZE(a) \
     ((sizeof(a) / sizeof(*(a))) / \
     static_cast<size_t>(!(sizeof(a) % sizeof(*(a)))))
 
-int resolve(const char* input)
-{
-    return 0;
-}
 
 int main(int argc, char* argv[]) 
 {
@@ -27,6 +25,13 @@ int main(int argc, char* argv[])
         //TODO please add more test case here
         };
     int expectedSteps[] = {25, 4, 7, 10, 14, 15, 3, 12, 13, 14, 20};
+    
+    for (size_t i = 0; i < H_ARRAYSIZE(input); ++i)
+    {
+        printf("expectedSteps: %d     calculate: %d \n", expectedSteps[i], resolve(input[i]));
+    }
+
+
     for (size_t i = 0; i < H_ARRAYSIZE(input); ++i)
     {
         assert(resolve(input[i]) == expectedSteps[i]);
