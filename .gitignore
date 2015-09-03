@@ -7,4 +7,5 @@
 *.ncb
 *.suo
 *.vcproj.*.user
+*.*~
 Debug
