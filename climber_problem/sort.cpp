@@ -1,6 +1,5 @@
 #include "sort.h"
 #include <stdlib.h>
-#include <iostream>
 
 /*插入排序*/
 void InsertionSort(ElementType A[], int N)
@@ -14,7 +13,7 @@ void InsertionSort(ElementType A[], int N)
 
 		for(j=i; j>0; j--)
 		{
-			if(temp <A[j-1])
+			if(temp.left <A[j-1].left)
 				A[j] = A[j-1];
 			else
 				break;
@@ -40,11 +39,11 @@ ElementType Median3(ElementType A[], int Left, int Right)
 	int Center = (Left + Right) / 2;
 
 	/*从左到右，从小到大排列*/
-	if(A[Left] > A[Center])
+	if(A[Left].left > A[Center].left)
 		Swap(&A[Left], &A[Center]);
-	if(A[Left] > A[Right])
+	if(A[Left].left > A[Right].left)
 		Swap(&A[Left], &A[Right]);
-	if(A[Center] > A[Right])
+	if(A[Center].left > A[Right].left)
 		Swap(&A[Center], &A[Right]);
 
 	Swap(&A[Center], &A[Right-1]);
@@ -66,8 +65,8 @@ void Qsort(ElementType A[], int Left, int Right)
 		j = Right-1;
 		while(1)
 		{
-			while(A[++i] < Pivot);
-			while(A[--j] > Pivot);
+			while(A[++i].left < Pivot.left);
+			while(A[--j].left > Pivot.left);
 			if(i < j)
 				Swap(&A[i], &A[j]);
 			else

@@ -4,10 +4,10 @@ email: yinwenatbit@163.com
 date: 2015/8/13
 description:各种排序方法
 ********************************************/
+#include "Mountain.h"
 
 
-
-typedef int ElementType;
+typedef struct Mountain ElementType;
 
 
 /*插入排序*/

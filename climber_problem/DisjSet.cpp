@@ -31,7 +31,7 @@ void SetUnion(DisjSet S, SetType root1, SetType root2)
 
 
 /*Â·¾¶Ñ¹Ëõ*/
-SetType Find(ElementType X, DisjSet S)
+SetType Find(int X, DisjSet S)
 {
 	if(S[X] <= 0)
 		return X;

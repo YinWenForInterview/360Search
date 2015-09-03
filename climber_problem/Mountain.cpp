@@ -8,6 +8,9 @@
 #include "Mountain.h"
 #include <iostream>
 #include <cstdlib>
+#include <unordered_map>
+#include "sort.h"
+#include "DisjSet.h"
 
 using namespace std;
 
@@ -15,13 +18,44 @@ typedef struct Mountain* Mount;
 
 int readFromStr(char const *strptr, Mount & M);
 int getnumber(char const *&ptr);
+void comboMountains(DisjSet &S, Mount &M, int num);
 
 /*count the distance*/
 int resolve(char const * originstr)
 {
     Mount mounts=NULL;
-    int total = readFromStr(originstr, mounts);
+    int totalMounts = readFromStr(originstr, mounts);
+
+    QuickSort(mounts, totalMounts);
+    DisjSet S;
+
+    int length = 0;
+    /*initialize Disjoint Set and calc the length*/
+    for(int i=0; i<totalMounts; i++)
+    {
+        S[i] = -mounts[i].hight;
+        if(length<mounts[i].right)
+            length = mounts[i].right;
+    }
+
+    /*combine the mountains that get along with*/
+    comboMountains(S, mounts, totalMounts);
     
+    std::unordered_map<int, int> uniqueMounts;
+    
+    /*add mountains to map, the hightest mountain in each gather remains*/
+    for(int i=0; i<totalMounts; i++)
+    {
+        SetType root = Find(i, S);
+        uniqueMounts.insert({root, S[root]});
+    }
+
+    int totalhight =0;
+    for(auto &x: uniqueMounts)
+        totalhight += x.second;
+
+    int distance = length -2*totalhight;
+    return distance;
 }
 
 /*read mountains from str*/
@@ -56,4 +90,18 @@ int getnumber(char const *&ptr)
     ++ptr;
     return atoi(str.c_str());
 
+}
+
+void comboMountains(DisjSet &S, Mount &M, int num)
+{
+    SetType root1, root2;
+    for(int i=0; i<num-1; i++)
+    {
+        if(M[i].left == M[i+1].left)
+            SetUnion(S, Find(i, S),Find(i+1, S));
+
+        if(M[i].right <= M[i+1].left)
+            SetUnion(S, Find(i, S),Find(i+1, S));
+
+    }
 }
