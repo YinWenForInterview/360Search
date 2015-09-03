@@ -22,9 +22,11 @@ int main(int argc, char* argv[])
         "3\n0,1,1\n2,4,3\n3,5,1",
         "4\n0,1,1\n2,4,3\n3,5,1\n5,6,1",
         "5\n0,1,1\n2,4,3\n3,5,1\n5,6,1\n6,8,3",
+        "",
+        "0\n",
         //TODO please add more test case here
         };
-    int expectedSteps[] = {25, 4, 7, 10, 14, 15, 3, 12, 13, 14, 20};
+    int expectedSteps[] = {25, 4, 7, 10, 14, 15, 3, 12, 13, 14, 20, 0, 0};
     
 
     for (size_t i = 0; i < H_ARRAYSIZE(input); ++i)

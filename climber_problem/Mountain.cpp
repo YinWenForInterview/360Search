@@ -24,9 +24,15 @@ int getToNextHight(const Mount & front, const Mount & rear);
 /*输入字符串，返回爬山经过的总长度*/
 int resolve(const char * originstr)
 {
+    if(*originstr == '\0')
+        return 0;
+
     Mount mounts=NULL;
     int totalMounts = readFromStr(originstr, mounts);
     
+    if(totalMounts == 0)
+        return 0;
+
     int totalhight = getTotalHight(mounts, totalMounts);
     int distance = totalhight + mounts[totalMounts -1].right;
 
