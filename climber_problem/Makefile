@@ -1,29 +1,23 @@
-# weizili@360.cn 
-
-CC=gcc
-CXX=g++
-CFLAGS= -g -c -D_DEBUG -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall -MMD
-CPPFLAGS=$(CFLAGS) -Woverloaded-virtual -Wsign-promo -fno-gnu-keywords -std=c++11
-
-SRCS := $(wildcard *.cc) 
-OBJS := $(patsubst %.cc, %.o, $(SRCS))
-DEPS := $(patsubst %.o, %.d, $(OBJS))
-
-TARGET=unittest_climber
-
-all : $(TARGET) 
+all : unittest_climber 
 
 check : $(TARGET)
 	./$^
 
-$(TARGET) : $(OBJS)
-	$(CXX) $(OBJS) $(LDFLAGS) -o $@
+CC=gcc
+CXX=g++
+CFLAGS= -g -D_DEBUG -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall -MMD
+CPPFLAGS=$(CFLAGS) -Woverloaded-virtual -Wsign-promo -fno-gnu-keywords -std=c++11
 
--include $(DEPS)
+OBJ =  main.o Mountain.o 
 
-%.o : %.cc
-	$(CXX) $(CFLAGS) $(CPPFLAGS) $< -o $@
+unittest_climber: main.o Mountain.o
+	$(CXX) $(CPPFLAGS) -o $@ $(OBJ)
+
+main.o: main.cc Mountain.h
+	$(CXX) $(CPPFLAGS) -c main.cc
+
+Mountain.o: Mountain.cpp Mountain.h 
+	$(CXX) $(CPPFLAGS) -c Mountain.cpp
 
 clean:
-	rm -rf *.o *.d $(OBJS) $(DEPS) $(TARGET) 
-
+	-rm *.o *.d $(all) 

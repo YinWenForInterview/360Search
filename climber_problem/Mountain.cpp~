@@ -21,7 +21,7 @@ int getNumber(const char *&ptr);
 int getTotalHight(const Mount & M, int totalMounts);
 int getToNextHight(const Mount & front, const Mount & rear);
 
-/*输入字符串，返回爬山经过的总长度*/
+/*count the distance*/
 int resolve(const char * originstr)
 {
     Mount mounts=NULL;
@@ -34,7 +34,7 @@ int resolve(const char * originstr)
     return distance;
 }
 
-/*开辟山信息结构体数组，传给M指针，返回山的总数*/
+/*read mountains from str*/
 int readFromStr(const char *strptr, Mount & M)
 {
     int num;
@@ -69,7 +69,6 @@ int getNumber(const char *&ptr)
 
 }
 
-/*计算爬山经过的总高度*/
 int getTotalHight(const Mount & M, int totalMounts)
 {
     int totalhight=0;
@@ -95,7 +94,6 @@ int getTotalHight(const Mount & M, int totalMounts)
     return totalhight;
 }
 
-/*计算到达下一座山的高度上爬上爬下经过的高度*/
 int getToNextHight(const Mount & front, const Mount &rear)
 {
     if(front->right < rear->left)
