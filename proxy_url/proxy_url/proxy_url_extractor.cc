@@ -98,8 +98,55 @@ namespace qh
 
     void ProxyURLExtractor::Extract( const KeyItems& keys, const std::string& raw_url, std::string& sub_url )
     {
-#if 0
+#if 1
         //TODO 请面试者在这里添加自己的代码实现以完成所需功能
+        Tokener token(raw_url);
+        token.skipTo('?');
+        token.next(); //skip one char : '?' 
+        std::string key;
+        while (!token.isEnd()) {
+		/*在获取key之前记录下当前位置，避免中间略过&时可以回退*/
+	    	const char* beforTakeKeyPos = token.getCurReadPos();
+            key = token.nextString('=');
+            if (keys.find(key) != keys.end()) {
+                const char* curpos = token.getCurReadPos();
+                int nreadable = token.getReadableSize();
+
+                /**
+                * case 1: 
+                *  raw_url="http://www.microsofttranslator.com/bv.aspx?from=&to=zh-chs&a=http://hnujug.com/&xx=yy"
+                *  sub_url="http://hnujug.com/"
+                */
+                sub_url = token.nextString('&');
+
+                if (sub_url.empty() && nreadable > 0) {
+                    /**
+                    * case 2: 
+                    * raw_url="http://www.microsofttranslator.com/bv.aspx?from=&to=zh-chs&a=http://hnujug.com/"
+                    * sub_url="http://hnujug.com/"
+                    */
+                    assert(curpos);
+                    sub_url.assign(curpos, nreadable);
+                }
+            }
+
+	    	/*key中间如果跳过了&符号则回退到获取key时候位置*/
+    		if(key.find('&') != std::string::npos)
+	    	{
+		    	while(token.getCurReadPos() > beforTakeKeyPos)
+		    	{
+			    	/*有可能在第一个？之后获取的Key中有&存在，如果遇到这种情况，会返回0，直接跳出即可*/
+			    	if(! token.skipBackTo('&'))
+				    	break;
+    				/*skipbackto的上一个指针指向&,必须跳过，不然原地循环*/
+	    			token.back();
+		    	}
+    			/*超过了原来的位置，前进一步回到原来的位置*/
+	    		token.next();
+	    	}
+            token.skipTo('&');
+            token.next();//skip one char : '&'
+        }
 #else
         //这是一份参考实现，但在特殊情况下工作不能符合预期
         Tokener token(raw_url);
