@@ -1,11 +1,31 @@
 #include <stdio.h>
 #include <assert.h>
-#include "Mountain.h"
-
+#include <iostream>
+#include <cstdlib>
 
 #define H_ARRAYSIZE(a) \
     ((sizeof(a) / sizeof(*(a))) / \
     static_cast<size_t>(!(sizeof(a) % sizeof(*(a)))))
+
+
+
+#define ABS(x) (((x)>0) ? (x) : (-(x)))
+
+struct Mountain
+{
+	int left;
+	int right;
+	int hight;
+};
+
+using namespace std;
+
+int resolve(const char * originstr);
+
+int getDistance(const char * ptr, int totalMounts); 
+int getNumber(const char *&ptr);
+void getMount(struct Mountain & M, const char *& strptr);
+int getToNextHight(const struct Mountain & front, const struct Mountain &rear);
 
 
 int main(int argc, char* argv[]) 
@@ -35,3 +55,92 @@ int main(int argc, char* argv[])
     }
     return 0;
 }
+
+
+
+
+/*输入字符串，返回爬山经过的总长度*/
+int resolve(const char * originstr)
+{
+    if(*originstr == '\0')
+        return 0;
+
+    int totalMounts = getNumber(originstr);
+    
+    if(totalMounts == 0)
+        return 0;
+
+    int distance = getDistance(originstr, totalMounts); 
+
+    return distance;
+}
+
+void getMount(struct Mountain & M, const char *& strptr)
+{
+    M.left = getNumber(strptr);
+    M.right = getNumber(strptr);
+    M.hight = getNumber(strptr);
+}
+
+
+/*输入数字开始的地址，返回数字，并且修改指针指向下一个开始的数字*/
+int getNumber(const char *&ptr)
+{
+    string str ="";
+    while( *ptr >='0'&& *ptr<='9' )
+    {
+        str += *ptr;
+        ++ptr;        
+    }
+    ++ptr;
+    return atoi(str.c_str());
+
+}
+
+/*计算爬山经过的总距离*/
+int getDistance(const char * ptr, int totalMounts)
+{
+
+    int i=0;
+    int totalhight= 0;
+    int totaldistance =0;
+    struct Mountain front;
+    struct Mountain rear = {-1,-1,-1};    
+
+    getMount(front, ptr);
+
+    /*jump to first mountain hight*/
+    totalhight += front.hight;
+
+    while(i<totalMounts -1)
+    {
+        getMount(rear, ptr);
+        totalhight += getToNextHight(front, rear);
+        front = rear;
+        ++i;
+    }
+    if(rear.left == -1)
+        totaldistance = totalhight+ front.hight +front.right;
+    else
+        totaldistance = totalhight+ rear.hight +rear.right;
+
+    return totaldistance;
+}
+
+/*计算到达下一座山的高度上爬上爬下经过的高度*/
+int getToNextHight(const struct Mountain & front, const struct Mountain &rear)
+{
+    if(front.right < rear.left)
+        return front.hight + rear.hight;
+    else
+        return ABS(front.hight - rear.hight);
+}
+
+
+
+
+
+
+
+
+
