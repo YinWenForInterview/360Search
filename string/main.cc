@@ -41,11 +41,54 @@ void test4()
         assert(false);
 }
 
+void test5()
+{
+    string lineA("8527");
+    string lineB = lineA;
+    if(!strcmp(lineA.data(), lineB.data()))
+        assert(true);
+    else
+        assert(false);
 
+}
 
+void test6()
+{
+    string line6("show me the money");
+    if(*line6[3] == 'w')
+        assert(true);
+    else
+        assert(false);
+
+}
+void test7()
+{
+    string line7("operation cwal");
+    if(line7[100] == NULL)
+        assert(true);
+    else 
+        assert(false);
+}
+
+void test8()
+{
+    string line8("blacksheep wall");
+    if(line8[-10] == NULL)
+        assert(true);
+    else 
+        assert(false);
+}
 
 int main(int argc, char* argv[])
 {
+    test1();
+    test2();
+    test3();
+    test4();
+    test5();
+    test6();
+    test7();
+    test8();
     //TODO 在这里添加单元测试，越多越好，代码路径覆盖率越全越好
     //TODO 单元测试写法请参考INIParser那个项目，不要写一堆printf，要用assert进行断言判断。
 

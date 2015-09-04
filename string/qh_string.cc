@@ -65,11 +65,13 @@ namespace qh
 
     const char* string::c_str() const
     {
-        return NULL;
+        return data_;
     }
 
     char* string::operator[]( size_t index )
     {
+        if(index<0 || index>len_-1)
+            return NULL;
         return &data_[index];
     }
 }
