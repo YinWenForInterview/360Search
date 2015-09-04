@@ -105,8 +105,8 @@ namespace qh
         token.next(); //skip one char : '?' 
         std::string key;
         while (!token.isEnd()) {
-		/*在获取key之前记录下当前位置，避免中间略过&时可以回退*/
-	    	const char* beforTakeKeyPos = token.getCurReadPos();
+            /*在获取key之前记录下当前位置，避免中间略过&时可以回退*/
+	        const char* beforTakeKeyPos = token.getCurReadPos();
             key = token.nextString('=');
             if (keys.find(key) != keys.end()) {
                 const char* curpos = token.getCurReadPos();
@@ -125,25 +125,32 @@ namespace qh
                     * raw_url="http://www.microsofttranslator.com/bv.aspx?from=&to=zh-chs&a=http://hnujug.com/"
                     * sub_url="http://hnujug.com/"
                     */
-                    assert(curpos);
-                    sub_url.assign(curpos, nreadable);
+                    /*如果是因为没有&返回空串，则m_pCurPos是没有移动过的*/
+                    if(curpos == token.getCurReadPos())
+                    {
+                        assert(curpos);
+                        sub_url.assign(curpos, nreadable);
+                    }
+                    /*在=&相连情况下避免出现=&key的情况，所以回退到&符号*/
+                    else
+   	                    token.back();
                 }
             }
 
-	    	/*key中间如果跳过了&符号则回退到获取key时候位置*/
-    		if(key.find('&') != std::string::npos)
-	    	{
-		    	while(token.getCurReadPos() > beforTakeKeyPos)
-		    	{
-			    	/*有可能在第一个？之后获取的Key中有&存在，如果遇到这种情况，会返回0，直接跳出即可*/
-			    	if(! token.skipBackTo('&'))
-				    	break;
-    				/*skipbackto的上一个指针指向&,必须跳过，不然原地循环*/
-	    			token.back();
-		    	}
-    			/*超过了原来的位置，前进一步回到原来的位置*/
-	    		token.next();
-	    	}
+	        /*key中间如果跳过了&符号则回退到获取key时候位置*/
+            if(key.find('&') != std::string::npos)
+	        {
+	            while(token.getCurReadPos() > beforTakeKeyPos)
+	            {
+	                /*有可能在第一个？之后获取的Key中有&存在，如果遇到这种情况，会返回0，直接跳出即可*/
+	                if(! token.skipBackTo('&'))
+	                    break;
+                    /*skipbackto的上一个指针指向&,必须跳过，不然原地循环*/
+	                token.back();
+	            }
+                /*超过了原来的位置，前进一步回到原来的位置*/
+	            token.next();
+	        }
             token.skipTo('&');
             token.next();//skip one char : '&'
         }
