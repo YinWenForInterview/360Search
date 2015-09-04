@@ -98,7 +98,7 @@ namespace qh
 
     void ProxyURLExtractor::Extract( const KeyItems& keys, const std::string& raw_url, std::string& sub_url )
     {
-#if 1
+#if 0
         //TODO 请面试者在这里添加自己的代码实现以完成所需功能
 #else
         //这是一份参考实现，但在特殊情况下工作不能符合预期
