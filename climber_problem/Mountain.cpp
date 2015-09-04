@@ -36,7 +36,7 @@ int resolve(const char * originstr)
     int totalhight = getTotalHight(mounts, totalMounts);
     int distance = totalhight + mounts[totalMounts -1].right;
 
-    delete mounts;
+    delete [] mounts;
     return distance;
 }
 
