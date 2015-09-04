@@ -1,0 +1,13 @@
+回答问题：
+1.没有资源泄露，readFromStr函数中使用的string类自动调用析构函数销毁，使用new[]生成的mountain结构体数组在退出resolve 函数时调用delelte[]删除了开辟的空间。
+
+2.只叙述resolve函数复杂度（M指字符串长度，N指山的数量）：
+	进行readFromStr函数时，遍历字符串，时间复杂度O(M),建立结构体,空间复杂度O(N)。
+	进行计算总的高度，遍历一遍数组，时间复杂度O(N)。
+	
+总时间复杂度O(N+M),空间复杂度O(N)
+
+新的解释：
+今天想了以下，程序可以把空间复杂度缩小到O（1），即在遍历字符串的时候，直接保存两个结构体front,rear即可，或者不建立结构体，直接和用frontleft, frontright, fronthight, 与rearleft, rearright, rearhight一共6个int保存数据即可，在完成的时候返回最后一个rearright加上总的高度即可。
+
+不过考虑到这个空间复杂度O（N）开销不大，改为O（1）也不难，暂时不修改，如时间充足在回头修改。
