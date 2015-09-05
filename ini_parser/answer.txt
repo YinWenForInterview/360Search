@@ -1,0 +1,21 @@
+回答这个项目问题：
+1资源泄露：
+	在构建INIParser类时使用了new [],获取了一个unordered_map<string, string>类，在结束时使用delete []，删除了空间，打开文件时，使用fopen打开，用自动变量和string保存数据，读取完之后使用fclose关闭u文件，没有文件句柄未关。
+
+注：本想用一个指针，根据section的个数来保存map个数，发现没有使用section初始化的接口，因此光有section读取也没法做，就留在这里了。如果有使用section初始化的接口，则可以使用一个map保存<string, size_t>类型的数据，类中可以保留一个计数器，记录section的个数，map保存section的名字和加入类的序号，序号对应保存key,value的map数组的序号。
+
+时间复杂度：字符串长度N，key,value对M个
+
+构造函数和析构函数 O（1）
+
+Parse解析函数：分别调用getKey 与getValue函数
+getKey先调用strstr搜索分隔符，排除无用的分隔符，在寻找key_value分隔符，如果没有key_value分隔符，代表没有数据，遍历了一遍字符串退出 O(N)
+如果有数据，每次遍历key=value分隔符长度，然后指针前进到下一部分，直到到达末尾，只用遍历字符串一遍，复杂度O(N)。所以一共只需要遍历一次即可，复杂度O（N）。
+
+Get函数：遍历一遍map,时间复杂度O(M)
+
+空间复杂度：
+使用了一个unordered_map保存数据，一共有M对，空间复杂度O(M)
+解析过程中，使用了key,和value两个string类保存结果，长度只与key，value长度有关，可以看作O（1）。
+读取文件时：
+使用了char temp[1024]和一个string to_parse,保存文件所有数据。空间复杂度O(1024+N)。
