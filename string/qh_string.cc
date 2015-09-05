@@ -7,8 +7,8 @@ namespace qh
     // TODO 将在这里写实现代码
 
     string::string()
-        : data_(NULL), len_(0)
     {
+        len_ =0;
         data_ = new char[1];
         data_[0] = '\0';
 
@@ -16,19 +16,45 @@ namespace qh
 
     string::string( const char* s )
     {
-        len_ = strlen(s);
-        data_ = new char[len_ +1];
-        strcpy(data_, s);
+        if(s == NULL)
+        {
+            len_ = 0;
+            data_ = new char[1];
+            data_[0] = '\0';
+        }
+        else
+        {
+            len_ = strlen(s);
+            data_ = new char[len_ +1];
+            strcpy(data_, s);
+        }
     }
 
     string::string( const char* s, size_t len )
     {
-        len_ = len;
-        data_ = new char[len_+1];
-        strncpy(data_, s, len_);
-        data_[len_] = '\0';
+        if(s == NULL )
+        {
+            len_ = 0;
+            data_ = new char[1];
+            data_[0] = '\0';
+        }
+        else
+        {
+            if(len > strlen(s))
+            {
+                len_ = strlen(s);
+                data_ = new char[len_ +1];
+                strcpy(data_, s);
+            }
+            else
+            {
+                len_ = len;
+                data_ = new char[len_+1];
+                strncpy(data_, s, len_);
+                data_[len_] = '\0';
+            }
+        }
     }
-
     string::string( const string& rhs )
     {
         len_ = rhs.len_;
@@ -70,7 +96,7 @@ namespace qh
 
     char* string::operator[]( size_t index )
     {
-        if(index<0 || index>len_-1)
+        if(index>len_-1)
             return NULL;
         return &data_[index];
     }

@@ -12,7 +12,7 @@ void test1()
 
 }
 
-void test11()
+void test2()
 {
     string line;
     if(!strcmp(line.c_str(), ""))
@@ -21,14 +21,14 @@ void test11()
         assert(false);
 }
 
-void test12()
+void test3()
 {
     string line("");
     assert(line.size() == 0);
 
 }
 
-void test2()
+void test4()
 {
     string line2("bye bye");
     if(!strcmp(line2.c_str(), "bye bye"))
@@ -37,7 +37,7 @@ void test2()
         assert(false);
 }
 
-void test3()
+void test5()
 {
     char array[20] = "say hello";
     string line3(array, 6);
@@ -47,7 +47,7 @@ void test3()
         assert(false);
 }
 
-void test4()
+void test6()
 {
     string lineA("how are you?");
     string lineB(lineA);
@@ -57,7 +57,7 @@ void test4()
         assert(false);
 }
 
-void test5()
+void test7()
 {
     string lineA("8527");
     string lineB = lineA;
@@ -68,7 +68,7 @@ void test5()
 
 }
 
-void test9()
+void test8()
 {
 
     string lineA("8527");
@@ -79,7 +79,7 @@ void test9()
         assert(false);
 }
 
-void test10()
+void test9()
 {
 
     string lineA("8527");
@@ -91,7 +91,7 @@ void test10()
         assert(false);
 }
 
-void test13()
+void test10()
 {
     
     string lineA("");
@@ -103,7 +103,7 @@ void test13()
         assert(false);
 }
 
-void test6()
+void test11()
 {
     string line6("show me the money");
     if(*line6[3] == 'w')
@@ -112,7 +112,7 @@ void test6()
         assert(false);
 
 }
-void test7()
+void test12()
 {
     string line7("operation cwal");
     if(line7[100] == NULL)
@@ -121,7 +121,44 @@ void test7()
         assert(false);
 }
 
-void test8()
+void test13()
+{
+    char * ptr =NULL;
+    string line(ptr);
+    assert(line.size() == 0);
+}
+
+void test14()
+{
+    char * ptr =NULL;
+    string line(ptr, 6);
+    assert(line.size() == 0);
+}
+
+void test15()
+{
+    char array[20] = "good bye";
+    string line(array, -1);
+    assert(line.size() == 8);
+}
+
+void test16()
+{
+    char array[20] = "good bye";
+    string line(array, 0);
+    assert(line.size() == 0);
+
+}
+
+void test17()
+{
+    
+    char array[20] = "good bye";
+    string line(array, 30);
+    assert(line.size() == 8);
+}
+
+void test18()
 {
     string line8("blacksheep wall");
     if(line8[-10] == NULL)
@@ -145,6 +182,11 @@ int main(int argc, char* argv[])
     test11();
     test12();
     test13();
+    test14();
+    test15();
+    test16();
+    test17();
+    test18();
     //TODO 在这里添加单元测试，越多越好，代码路径覆盖率越全越好
     //TODO 单元测试写法请参考INIParser那个项目，不要写一堆printf，要用assert进行断言判断。
 
