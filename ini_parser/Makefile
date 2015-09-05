@@ -2,12 +2,12 @@
 
 CC=gcc
 CXX=g++
-CFLAGS= -g -c -D_DEBUG -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall -MMD
-CPPFLAGS=$(CFLAGS) -Woverloaded-virtual -Wsign-promo -fno-gnu-keywords 
+CFLAGS= -g -D_DEBUG -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall -MMD
+CPPFLAGS=$(CFLAGS) -Woverloaded-virtual -Wsign-promo -fno-gnu-keywords -std=c++11
 
-SRCS := $(wildcard *.cc) 
-OBJS := $(patsubst %.cc, %.o, $(SRCS))
-DEPS := $(patsubst %.o, %.d, $(OBJS))
+
+OBJS := main.o ini_parser.o  
+
 
 TARGET=unittest_iniparser
 
@@ -17,12 +17,15 @@ check : $(TARGET)
 	./$^
 
 $(TARGET) : $(OBJS)
-	$(CXX) $(OBJS) $(LDFLAGS) -o $@
+	$(CXX) $(CPPFLAGS) -o $@ $(OBJS)
 
--include $(DEPS)
 
-%.o : %.cc
-	$(CXX) $(CFLAGS) $(CPPFLAGS) $< -o $@
+
+ini_parser.o: ini_parser.cc ini_parser.h tokener.h
+	$(CXX) $(CPPFLAGS) -c ini_parser.cc
+
+main.o: main.cc ini_parser.h
+	$(CXX) $(CPPFLAGS) -c main.cc
 
 clean:
 	rm -rf *.o *.d $(OBJS) $(DEPS) $(TARGET) 

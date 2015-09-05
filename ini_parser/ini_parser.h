@@ -2,6 +2,8 @@
 #define QIHOO_INI_PARSER_H_
 
 #include <string>
+#include <unordered_map>
+#include "tokener.h"
 
 namespace qh
 {
@@ -37,6 +39,8 @@ namespace qh
         const std::string& Get(const std::string& section, const std::string& key, bool* found);
 
     private:
+        size_t sections;
+        std::unordered_map<std::string, std::string> *Items;
     };
 }
 
