@@ -3,40 +3,43 @@
 #include <stdio.h>
 
 
+
 std:: string getKey(const char *& startPos, const char * line_sep, const char * key_value_sep)
 {
-	std::string get("");
-	const char * front;
-	const char * rear;
-	/*前面还有line分隔符*/
-	while(strstr(startPos, line_sep) == startPos)
-		startPos += strlen(line_sep);
+    std::string get("");
+    const char * front;
+    const char * rear;
+    /*前面还有line分隔符*/
+    while(strstr(startPos, line_sep) == startPos)
+        startPos += strlen(line_sep);
 
-	rear = strstr(startPos, key_value_sep);
-	if(rear == NULL)
-		return get;
-	get.assign(startPos, rear - startPos);
-	startPos = rear + strlen(key_value_sep);
-	return get;
+    rear = strstr(startPos, key_value_sep);
+    if(rear == NULL)
+        return get;
+
+    get.assign(startPos, rear - startPos);
+    startPos = rear + strlen(key_value_sep);
+    return get;
 }
+
 
 std:: string getValue(const char *& startPos, const char * line_sep, const char * key_value_sep)
 {
-	std::string get("");
-	const char * rear;
-	rear = strstr(startPos, line_sep);
-	/*到达了字符串尾部*/
-	if(rear == NULL)
-	{
-		get.assign(startPos);
-		startPos += strlen(startPos);
-	}
-	else
-	{
-		get.assign(startPos, rear - startPos);
-		startPos = rear +strlen(line_sep);
-	}
-	return get;
+    std::string get("");
+    const char * rear;
+    rear = strstr(startPos, line_sep);
+    /*到达了字符串尾部*/
+    if(rear == NULL)
+    {
+        get.assign(startPos);
+        startPos += strlen(startPos);
+    }
+    else
+    {
+        get.assign(startPos, rear - startPos);
+        startPos = rear +strlen(line_sep);
+    }
+    return get;
 }
 
 
@@ -46,7 +49,7 @@ namespace qh
     {
         sections = 1;
         Items = new std::unordered_map<std::string,std::string>[1];
-		empty = "";
+        empty = "";
     }
 
     INIParser::~INIParser()
@@ -83,26 +86,26 @@ namespace qh
         if(strlen(ini_data) < ini_data_len)
             ini_data_len = strlen(ini_data);
 
-	    const char * line_sep = line_seperator.c_str();
-		const char * key_value_sep = key_value_seperator.c_str();
-		size_t line_sep_len = strlen(line_sep);
-		size_t key_value_sep_len = strlen(key_value_sep);
+        const char * line_sep = line_seperator.c_str();
+        const char * key_value_sep = key_value_seperator.c_str();
+        size_t line_sep_len = strlen(line_sep);
+        size_t key_value_sep_len = strlen(key_value_sep);
 
-		std::string key;
-		std::string value;
+        std::string key;
+        std::string value;
 
-		const char * startPos = ini_data;
-		const char * endPos = ini_data;
+        const char * startPos = ini_data;
+        const char * endPos = ini_data;
         while(ini_data + ini_data_len > startPos)
-		{
-			key = getKey(startPos, line_sep, key_value_sep);
-			/*到达末尾*/
-			if(key.empty())
-				break;
+        {
+            key = getKey(startPos, line_sep, key_value_sep);
+            /*到达末尾*/
+            if(key.empty())
+            break;
 
-			value = getValue(startPos, line_sep, key_value_sep);
-			Items[0].insert(make_pair(key, value));
-		}
+            value = getValue(startPos, line_sep, key_value_sep);
+            Items[0].insert(make_pair(key, value));
+        }
         return true;
     }
 
@@ -110,9 +113,17 @@ namespace qh
     {
         auto got = Items[0].find(key);
         if(got != Items[0].end())
+        {
+            if(found != NULL)
+                *found = true;
             return got->second;
+        }
         else
+        {
+            if(found != NULL)
+                *found = false;
             return this->empty;
+        }
     }
 
     const std::string& INIParser::Get(const std::string& section, const std::string& key, bool* found)
@@ -120,10 +131,17 @@ namespace qh
         std::string empty("");
         auto got = Items[0].find(key);
         if(got != Items[0].end())
+        {
+            if(found != NULL)
+                *found = true;
             return got->second;
+        }
         else
+        {
+            if(found != NULL)
+                *found = false;
             return this->empty;
+        }
     }
-
 }
 

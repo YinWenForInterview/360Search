@@ -59,6 +59,25 @@ void test3()
 
 void test4()
 {
+    /*end with 7 | */
+    const char* ini_text= "||||a:1||b:2||||c:3|||||||"; 
+    qh::INIParser parser;
+    if (!parser.Parse(ini_text, strlen(ini_text), "||", ":")) {
+        assert(false);
+    }
+
+    const std::string& a = parser.Get("a", NULL);
+    assert(a == "1");
+
+    std::string b = parser.Get("b", NULL);
+    assert(b == "2");
+
+    const std::string& c = parser.Get("c", NULL);
+    assert(c == "3");
+}
+
+void test5()
+{
     std::string file("./test.txt");
     qh::INIParser parser;
     if (!parser.Parse(file)) {
@@ -85,6 +104,7 @@ int main(int argc, char* argv[])
     test2();
     test3();
     test4();
+    test5();
 
     return 0;
 }
