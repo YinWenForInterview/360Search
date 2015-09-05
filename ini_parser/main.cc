@@ -57,6 +57,26 @@ void test3()
     assert(c == "3");
 }
 
+void test4()
+{
+    std::string file("./test.txt");
+    qh::INIParser parser;
+    if (!parser.Parse(file)) {
+        assert(false);
+    }
+
+    const std::string& a = parser.Get("a", NULL);
+    assert(a == "1");
+
+    std::string b = parser.Get("b", NULL);
+    assert(b == "2");
+
+    const std::string& c = parser.Get("c", NULL);
+    assert(c == "3");
+}
+
+
+
 int main(int argc, char* argv[])
 {
     //TODO 在这里添加单元测试，越多越好，代码路径覆盖率越全越好
@@ -64,6 +84,7 @@ int main(int argc, char* argv[])
     test1();
     test2();
     test3();
+    test4();
 
     return 0;
 }

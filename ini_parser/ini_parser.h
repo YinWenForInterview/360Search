@@ -39,7 +39,7 @@ namespace qh
         const std::string& Get(const std::string& section, const std::string& key, bool* found);
 
     private:
-		std::string empty;
+	std::string empty;
         size_t sections;
         std::unordered_map<std::string, std::string> *Items;
     };

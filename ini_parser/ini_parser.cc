@@ -1,5 +1,6 @@
 #include "ini_parser.h"
 #include <cstring>
+#include <stdio.h>
 
 
 std:: string getKey(const char *& startPos, const char * line_sep, const char * key_value_sep)
@@ -52,6 +53,27 @@ namespace qh
     {
         delete [] Items;
     }
+
+    bool INIParser::Parse(const std::string& ini_file_path)
+    {
+        FILE * iniFile; 
+        iniFile = fopen(ini_file_path.c_str(), "r");
+        if(iniFile == NULL)
+            return false;
+
+        char temp[1024];
+        int nread;
+        std::string to_parser;
+        while( (nread = fread(temp, 1, 1024, iniFile)) > 0)
+        {
+            to_parser +=std::string(temp, nread);
+        }
+        Parse(to_parser.c_str(), to_parser.size());
+        fclose(iniFile);
+        return true;
+    }
+
+
 
     bool INIParser::Parse(const char* ini_data, size_t ini_data_len, const std::string& line_seperator, const std::string& key_value_seperator)
     {
