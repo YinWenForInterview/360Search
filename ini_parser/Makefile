@@ -21,7 +21,7 @@ $(TARGET) : $(OBJS)
 
 
 
-ini_parser.o: ini_parser.cc ini_parser.h tokener.h
+ini_parser.o: ini_parser.cc ini_parser.h
 	$(CXX) $(CPPFLAGS) -c ini_parser.cc
 
 main.o: main.cc ini_parser.h

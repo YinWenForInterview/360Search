@@ -1,4 +1,42 @@
 #include "ini_parser.h"
+#include <cstring>
+
+
+std:: string getKey(const char *& startPos, const char * line_sep, const char * key_value_sep)
+{
+	std::string get("");
+	const char * front;
+	const char * rear;
+	/*前面还有line分隔符*/
+	while(strstr(startPos, line_sep) == startPos)
+		startPos += strlen(line_sep);
+
+	rear = strstr(startPos, key_value_sep);
+	if(rear == NULL)
+		return get;
+	get.assign(startPos, rear - startPos);
+	startPos = rear + strlen(key_value_sep);
+	return get;
+}
+
+std:: string getValue(const char *& startPos, const char * line_sep, const char * key_value_sep)
+{
+	std::string get("");
+	const char * rear;
+	rear = strstr(startPos, line_sep);
+	/*到达了字符串尾部*/
+	if(rear == NULL)
+	{
+		get.assign(startPos);
+		startPos += strlen(startPos);
+	}
+	else
+	{
+		get.assign(startPos, rear - startPos);
+		startPos = rear +strlen(line_sep);
+	}
+	return get;
+}
 
 
 namespace qh
@@ -7,6 +45,7 @@ namespace qh
     {
         sections = 1;
         Items = new std::unordered_map<std::string,std::string>[1];
+		empty = "";
     }
 
     INIParser::~INIParser()
@@ -16,56 +55,53 @@ namespace qh
 
     bool INIParser::Parse(const char* ini_data, size_t ini_data_len, const std::string& line_seperator, const std::string& key_value_seperator)
     {
-        if(ini_data == NULL)
+        if(ini_data == NULL || line_seperator.size() == 0 || key_value_seperator.size() == 0)
             return false;
 
         if(strlen(ini_data) < ini_data_len)
             ini_data_len = strlen(ini_data);
 
-        Tokener token(ini_data, ini_data_len);
-        char line_sep, key_value_sep;
-        std::string key;
-        std::string value;
-        if(line_seperator.size() == 1 && key_value_seperator.size() == 1)
-        {
-            line_sep = line_seperator[0];
-            key_value_sep = key_value_seperator[0];
-            while(!token.isEnd())
-            {
-                key = token.nextString(key_value_sep);
+	    const char * line_sep = line_seperator.c_str();
+		const char * key_value_sep = key_value_seperator.c_str();
+		size_t line_sep_len = strlen(line_sep);
+		size_t key_value_sep_len = strlen(key_value_sep);
 
-                const char* curpos = token.getCurReadPos();
-                int nreadable = token.getReadableSize();
+		std::string key;
+		std::string value;
 
-                value = token.nextString(line_sep);
+		const char * startPos = ini_data;
+		const char * endPos = ini_data;
+        while(ini_data + ini_data_len > startPos)
+		{
+			key = getKey(startPos, line_sep, key_value_sep);
+			/*到达末尾*/
+			if(key.empty())
+				break;
 
-                if (value.empty() && nreadable > 0) 
-                {
-                    assert(curpos);
-                    value.assign(curpos, nreadable);
-                    Items[0].insert({key, value});
-                    break;
-                }
-                Items[0].insert({key, value});
-
-            }
-
-        }
+			value = getValue(startPos, line_sep, key_value_sep);
+			Items[0].insert(make_pair(key, value));
+		}
         return true;
     }
 
     const std::string& INIParser::Get(const std::string& key, bool* found)
     {
-        std::string empty;
         auto got = Items[0].find(key);
         if(got != Items[0].end())
             return got->second;
         else
-            return empty;
+            return this->empty;
     }
 
     const std::string& INIParser::Get(const std::string& section, const std::string& key, bool* found)
     {
-
+        std::string empty("");
+        auto got = Items[0].find(key);
+        if(got != Items[0].end())
+            return got->second;
+        else
+            return this->empty;
     }
+
 }
+
