@@ -7,12 +7,25 @@
 std:: string getKey(const char *& startPos, const char * line_sep, const char * key_value_sep)
 {
     std::string get("");
-    const char * front;
     const char * rear;
+    const char * line_sepPos = strstr(startPos, line_sep);
+    const char * key_value_sepPs = strstr(startPos, key_value_sep);
     /*前面还有line分隔符*/
-    while(strstr(startPos, line_sep) == startPos)
-        startPos += strlen(line_sep);
+    if(line_sepPos != NULL && key_value_sepPs != NULL)
+    {
+        while(line_sepPos < key_value_sepPs)
+        {
+            /*start with line_sep*/
+            if(line_sepPos == startPos)
+                startPos += strlen(line_sep);
+            /*have blank or irrelenvent data before line_sep*/
+            else
+                startPos = line_sepPos;
 
+            line_sepPos = strstr(startPos, line_sep);
+            key_value_sepPs = strstr(startPos, key_value_sep);
+        }
+    }
     rear = strstr(startPos, key_value_sep);
     if(rear == NULL)
         return get;
@@ -80,7 +93,7 @@ namespace qh
 
     bool INIParser::Parse(const char* ini_data, size_t ini_data_len, const std::string& line_seperator, const std::string& key_value_seperator)
     {
-        if(ini_data == NULL || line_seperator.size() == 0 || key_value_seperator.size() == 0)
+        if(ini_data == NULL || ini_data_len == 0 || line_seperator.size() == 0 || key_value_seperator.size() == 0)
             return false;
 
         if(strlen(ini_data) < ini_data_len)
@@ -88,14 +101,11 @@ namespace qh
 
         const char * line_sep = line_seperator.c_str();
         const char * key_value_sep = key_value_seperator.c_str();
-        size_t line_sep_len = strlen(line_sep);
-        size_t key_value_sep_len = strlen(key_value_sep);
 
         std::string key;
         std::string value;
 
         const char * startPos = ini_data;
-        const char * endPos = ini_data;
         while(ini_data + ini_data_len > startPos)
         {
             key = getKey(startPos, line_sep, key_value_sep);
@@ -128,7 +138,6 @@ namespace qh
 
     const std::string& INIParser::Get(const std::string& section, const std::string& key, bool* found)
     {
-        std::string empty("");
         auto got = Items[0].find(key);
         if(got != Items[0].end())
         {
